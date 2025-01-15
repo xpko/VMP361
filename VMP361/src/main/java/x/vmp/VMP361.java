@@ -3,9 +3,12 @@ package x.vmp;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -15,6 +18,40 @@ public class VMP361 {
     private static final Map<Integer,Object> resultMap=new ConcurrentHashMap<>();
 
     private static final AtomicInteger idGenerator = new AtomicInteger();
+
+    @SuppressWarnings("unchecked")
+    public static <R extends Method> R createMethod(Class<R> cls) {
+        if (vmpMethodMap.containsKey(cls.getName())) {
+            return (R) vmpMethodMap.get(cls.getName());
+        }
+        if (Thread.currentThread() == Looper.getMainLooper().getThread()) {
+            try {
+                R result = cls.newInstance();
+                vmpMethodMap.put(cls.getName(), result);
+                return result;
+            } catch (IllegalAccessException | InstantiationException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            CountDownLatch countDownLatch = new CountDownLatch(1);
+            new Handler(Looper.getMainLooper()).post(() -> {
+                try {
+                    R result = cls.newInstance();
+                    vmpMethodMap.put(cls.getName(), result);
+                } catch (IllegalAccessException | InstantiationException e) {
+                    throw new RuntimeException(e);
+                } finally {
+                    countDownLatch.countDown();
+                }
+            });
+            try {
+                countDownLatch.await();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            return (R) vmpMethodMap.get(cls.getName());
+        }
+    }
 
     @SuppressWarnings("unchecked")
     static <R> R exec(String methodName, Object... args){
@@ -34,6 +71,12 @@ public class VMP361 {
         return (R) result;
     }
 
+    static <V> V getOrDefault(Map<Integer, V> sMap, int key, V defValue) {
+        V v;
+        return (((v = sMap.get(key)) != null) || sMap.containsKey(key))
+                ? v
+                : defValue;
+    }
     @SuppressWarnings("unchecked")
      static <R> R getArg(Bundle bundle,int index,R defValue){
         int argsId=bundle.getInt("vmp_args_id",-1);
@@ -43,12 +86,6 @@ public class VMP361 {
             return defValue;
         }
         return (R) args[index];
-    }
-    static <V> V getOrDefault(Map<Integer,V> sMap,int key,V defValue){
-        V v;
-        return (((v = sMap.get(key)) != null) || sMap.containsKey(key))
-                ? v
-                : defValue;
     }
       static void putResult(Bundle bundle,Object value){
         int resultId=idGenerator.incrementAndGet();
@@ -60,7 +97,7 @@ public class VMP361 {
         Bundle args;
 
         protected Method(){
-            vmpMethodMap.put(methodName(),this);
+
         }
         @SuppressLint("MissingSuperCall")
         @Override
