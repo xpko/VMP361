@@ -1,14 +1,8 @@
 pluginManagement {
     repositories {
-        google {
-            content {
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
-                includeGroupByRegex("androidx.*")
-            }
-        }
-        mavenCentral()
         gradlePluginPortal()
+        google()
+        mavenCentral()
     }
 }
 dependencyResolutionManagement {
@@ -16,9 +10,13 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url 'https://jitpack.io'
+        }
+        maven{ url 'https://maven.aliyun.com/nexus/content/groups/public/'}
+        maven { url "https://oss.jfrog.org/libs-snapshot" }
+        jcenter()
     }
 }
-
 rootProject.name = "VMP361"
-include ':app'
 include ':VMP361'

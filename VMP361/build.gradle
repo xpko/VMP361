@@ -1,13 +1,15 @@
 plugins {
-    alias(libs.plugins.android.library)
+    id 'com.android.library'
 }
 
 android {
+    compileSdk 33
+    
     namespace 'x.vmp'
-    compileSdk 34
 
     defaultConfig {
-        minSdk 21
+        minSdk 14
+        targetSdk 33
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -27,7 +29,4 @@ android {
 
 dependencies {
 
-    testImplementation libs.junit
-    androidTestImplementation libs.ext.junit
-    androidTestImplementation libs.espresso.core
 }
