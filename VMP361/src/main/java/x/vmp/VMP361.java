@@ -70,7 +70,7 @@ public class VMP361 {
         private String methodName(){
             return this.getClass().getName();
         }
-        public  <R> R call(){
+        public  <R> R call(Object... args){
             return VMP361.exec(methodName(),args);
         }
         protected  <R> R getArg(int index){
