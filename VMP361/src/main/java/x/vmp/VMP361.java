@@ -1,11 +1,17 @@
 package x.vmp;
 
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
@@ -121,4 +127,10 @@ public class VMP361 {
             putResult(args,value);
         }
     }
+
+    @Target({METHOD, TYPE})
+    @Retention(RetentionPolicy.CLASS)
+    public @interface Protect {
+    }
+
 }
