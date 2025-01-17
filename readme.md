@@ -119,7 +119,9 @@ public class Main extends Activity {
 一行代码搞定：
 
 ```java
-VMP361.createMethod(Request.class).call("aaa")
+VMP361.createMethod(Request .class).
+
+call("aaa");
 ```
 
 ## 批量化操作(TODO)
@@ -127,7 +129,7 @@ VMP361.createMethod(Request.class).call("aaa")
 将要想保护的函数或类加上注解，比如
 
 ```java
-import x.vmp.VMP361
+import x.vmp.VMP361;
 
 public class EncryptUtil {
 
@@ -142,7 +144,7 @@ public class EncryptUtil {
 命名的Activity里的onCreate方法里，并将该Activity注册到AndroidManifest.xml里，最后再通过上面说的一行代码调用即可
 
 ```java
-import x.vmp.VMP361
+import x.vmp.VMP361;
 
 public class EncryptUtil {
 
@@ -154,7 +156,7 @@ public class EncryptUtil {
 ```
 
 ```java
-import x.vmp.VMP361
+import x.vmp.VMP361;
 
 public class EncryptUtil_encrypt extends VMP361.Method {
 
@@ -167,5 +169,9 @@ public class EncryptUtil_encrypt extends VMP361.Method {
 ```
 
 当然，这只是一种最简单的函数，实际函数可能要复杂的多，比如涉及外部变量和函数调用等等
+
+## 基于成品APK做批量化操作(TODO)
+
+还有一种方式不是基于AS插件，而是直接对apk进行操作，通过dexlib等类似的工具直接解析重构dex和AndroidManifest.xml文件，看看后面有空时间再搞吧，或者有做过这方面研究的大佬也可以试试
 
 不过不确定360加固保护onCreate的个数有没有限制
