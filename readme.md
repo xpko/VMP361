@@ -1,4 +1,5 @@
-本仓库已弃用，360免费版可以通过注解 @QVMProtect 来指定要VMP的函数
+本仓库已弃用，360免费版可以通过注解 [@QVMProtect](https://bbs.360.cn/thread-15265524-1-1.html)
+来指定要VMP的函数
 # VMP361
 
 For details, refer
