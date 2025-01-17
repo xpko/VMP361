@@ -121,3 +121,51 @@ public class Main extends Activity {
 ```java
 VMP361.createMethod(Request.class).call("aaa")
 ```
+
+## 批量化操作(TODO)
+
+将要想保护的函数或类加上注解，比如
+
+```java
+import x.vmp.VMP361
+
+public class EncryptUtil {
+
+    @VMP361.Protect
+    public String encrypt(String data) {
+        return base64(aes(data));
+    }
+}
+```
+
+然后通过AS插件，自动化提取被注解的函数的代码，放到一个以<类名>+<函数名>
+命名的Activity里的onCreate方法里，并将该Activity注册到AndroidManifest.xml里，最后再通过上面说的一行代码调用即可
+
+```java
+import x.vmp.VMP361
+
+public class EncryptUtil {
+
+    @VMP361.Protect
+    public String encrypt(String data) {
+        return VMP361.createMethod(EncryptUtil_encrypt.class).call(data)
+    }
+}
+```
+
+```java
+import x.vmp.VMP361
+
+public class EncryptUtil_encrypt extends VMP361.Method {
+
+    @VMP361.Protect
+    public void onCreate(Bundle args) {
+        super.onCreate(args);
+        result(base64(aes(getArg(0))));
+    }
+}
+```
+
+当然，这只是一种最简单的函数，实际函数可能要复杂的多，比如涉及外部变量和函数调用等等
+
+不过不确定360加固保护onCreate的个数有没有限制
