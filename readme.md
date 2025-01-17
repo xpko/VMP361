@@ -1,3 +1,4 @@
+本仓库已弃用，360免费版可以通过注解 @QVMProtect 来指定要VMP的函数
 # VMP361
 
 For details, refer
